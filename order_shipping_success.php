@@ -62,7 +62,7 @@ if ( $token != "" )
 		'-------------------------------------------------------------------------
 		*/
 	
-		$finalPaymentAmount =  $_SESSION["cart_item_total_amt"] + $shipping_amt; 
+		$finalPaymentAmount =  $_SESSION["cart_item_total_amt"] + $shipping_amt + $tax_amt; 
 		
 		/*
 		'-------------------------------------------------
@@ -73,7 +73,7 @@ if ( $token != "" )
 		'-------------------------------------------------
 		*/
 
-		$resArray = ConfirmPayment ( $finalPaymentAmount, $PayPalCurrencyCode, $paymentType );
+		$resArray = ConfirmPayment ( $finalPaymentAmount );
 		$ack = strtoupper($resArray["ACK"]);
 		if( $ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING" )
 		{		

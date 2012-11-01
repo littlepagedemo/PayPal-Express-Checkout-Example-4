@@ -114,7 +114,7 @@ if ($_REQUEST['action'] == "callbackSet")
 		// Cart items
 		$payment_request = get_payment_request();
 		
-		$paymentAmount = $_SESSION["cart_item_total_amt"] + $shipping_amount1;	// update Total payment
+		$paymentAmount = $_SESSION["cart_item_total_amt"] + $shipping_amount1 + $tax_amt;	// update Total payment
 		
 		$max_amount = '&MAXAMT=100'; 				// required for Instant Update API
 		$callbackversion = '&CALLBACKVERSION=61'; 	// required for Instant Update API
@@ -124,19 +124,17 @@ if ($_REQUEST['action'] == "callbackSet")
 		$calltimeout = '&CALLBACKTIMEOUT=5';
 
 
-		$tax_data = '';
-		if($tax_amt)
-				$tax_data = '&PAYMENTREQUEST_0_TAXAMT='.urlencode($tax_amt);		
+		//$tax_data = '';
+		//if($tax_amt)
+				//$tax_data = '&PAYMENTREQUEST_0_TAXAMT='.urlencode($tax_amt);		
 		
-		$padata = 	'&ALLOWNOTE=1'.	
-					$insurance_data.	
+		$padata = 	$insurance_data.	
 					$shipping_option.
 					$callbackurl.
 					$calltimeout.
 					$callbackversion.
 					$max_amount.
-					$shipping_data.					
-					$tax_data.					
+					$shipping_data.										
 				 	$payment_request;				
 		//echo '<br>'.$padata;							
 					
@@ -151,7 +149,7 @@ if ($_REQUEST['action'] == "callbackSet")
 		//' Calls the SetExpressCheckout API call
 		//' Prepares the parameters for the SetExpressCheckout API Call
 		//'-------------------------------------------------------------		
-		$resArray = CallShortcutExpressCheckout ($paymentAmount, $PayPalCurrencyCode, $paymentType, $PayPalReturnURL, $PayPalCancelURL, $padata);
+		$resArray = CallShortcutExpressCheckout ($paymentAmount, $padata);
 		
 		$ack = strtoupper($resArray["ACK"]);
 		if($ack=="SUCCESS" || $ack=="SUCCESSWITHWARNING")
@@ -162,7 +160,7 @@ if ($_REQUEST['action'] == "callbackSet")
 		else  
 		{
 			//Display a user friendly Error on the page using any of the following error information returned by PayPal
-			DisplayErrorMessage('SetExpressCheckout', $resArray, $padata.$paymentAmount);
+			DisplayErrorMessage('SetExpressCheckout', $resArray, $padata.' payAmount'.$paymentAmount);
 			
 		}
 			

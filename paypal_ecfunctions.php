@@ -43,7 +43,7 @@ include_once("config.php");
 	*/	
 	
 	$tax_amt = '0';		// no tax amount
-	//$tax_amt = '2.00';	// or Flat rate
+	$tax_amt = '2.00';	// or Flat rate
 
 	//-------------------------------------------	
 	// Check cart item exits
@@ -144,7 +144,8 @@ include_once("config.php");
 								'&L_PAYMENTREQUEST_0_QTY'.$n.'='.urlencode($c[4]);												
 			$n++;
 		}
-		$payment_request .= '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($_SESSION['cart_item_total_amt']);
+		
+		$payment_request .= '&PAYMENTREQUEST_0_ITEMAMT='.urlencode(number_format($_SESSION['cart_item_total_amt'],2));
 		return $payment_request;
 	}
 					
@@ -170,20 +171,26 @@ include_once("config.php");
 	'       padata:				cart items details
 	'--------------------------------------------------------------------------------------------------------------------------------------------	
 	*/
-	function CallShortcutExpressCheckout( $paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $padata) 
+	function CallShortcutExpressCheckout( $paymentAmount, $padata) 
 	{
+		global $PayPalCurrencyCode, $paymentType, $PayPalReturnURL, $PayPalCancelURL, $tax_amt;
+		
 		//------------------------------------------------------------------------------------------------------------------------------------
 		// Construct the parameter string that describes the SetExpressCheckout API call in the shortcut implementation
 		
-		$nvpstr="&PAYMENTREQUEST_0_AMT=". urlencode("$paymentAmount");
+		$nvpstr="&PAYMENTREQUEST_0_AMT=". urlencode(number_format($paymentAmount,2));
 		$nvpstr = $nvpstr . "&PAYMENTREQUEST_0_PAYMENTACTION=" . urlencode("$paymentType");
-		$nvpstr = $nvpstr . "&PAYMENTREQUEST_0_CURRENCYCODE=" . urlencode("$currencyCodeType");		
-		$nvpstr = $nvpstr . "&RETURNURL=" . urlencode("$returnURL");
-		$nvpstr = $nvpstr . "&CANCELURL=" . urlencode("$cancelURL");
-		
+		$nvpstr = $nvpstr . "&PAYMENTREQUEST_0_CURRENCYCODE=" . urlencode("$PayPalCurrencyCode");		
+		$nvpstr = $nvpstr . "&RETURNURL=" . urlencode("$PayPalReturnURL");
+		$nvpstr = $nvpstr . "&CANCELURL=" . urlencode("$PayPalCancelURL");
+
+		if($tax_amt > 0)
+			$nvpstr = $nvpstr . '&PAYMENTREQUEST_0_TAXAMT='.urlencode($tax_amt);
+					
 		$nvpstr = $nvpstr . '&ALLOWNOTE=1';
 		$nvpstr = $nvpstr . '&REQCONFIRMSHIPPING=1'; // To require that the shipping address be a PayPal confirmed address
-		$nvpstr = $nvpstr . $padata;		
+		$nvpstr = $nvpstr . $padata;
+				
 		//echo $nvpstr;
 		//exit();
 		
@@ -260,8 +267,10 @@ include_once("config.php");
 	'		The NVP Collection object of the DoExpressCheckoutPayment Call Response.
 	'--------------------------------------------------------------------------------------------------------------------------------------------	
 	*/
-	function ConfirmPayment( $FinalPaymentAmt, $currencyCodeType, $paymentType )
+	function ConfirmPayment( $FinalPaymentAmt )
 	{
+		global $PayPalCurrencyCode, $paymentType;
+		
 		/* 	Gather the information to make the final call tofinalize the PayPal payment. 
 			The variable nvpstr holds the name value pairs		  
 		*/
@@ -278,7 +287,7 @@ include_once("config.php");
 					'&PAYERID=' . $payerID . 
 					'&PAYMENTREQUEST_0_PAYMENTACTION=' . $paymentType . 
 					'&PAYMENTREQUEST_0_AMT=' . $FinalPaymentAmt;
-		$nvpstr .=  '&PAYMENTREQUEST_0_CURRENCYCODE=' . $currencyCodeType . 
+		$nvpstr .=  '&PAYMENTREQUEST_0_CURRENCYCODE=' . $PayPalCurrencyCode . 
 					'&IPADDRESS=' . $serverName; 
 
 

@@ -15,7 +15,7 @@ if($_POST)
 	$ItemPrice = $_POST["itemprice"]; //Item Price
 	$ItemNumber = $_POST["itemnumber"]; //Item Number
 	$ItemQty = $_POST["itemQty"]; // Item Quantity
-	$ItemTotalPrice = number_format(($ItemPrice*$ItemQty),2); //(Item Price x Quantity = Total) Get total amount of product; 
+	$ItemTotalPrice = $ItemPrice*$ItemQty; //(Item Price x Quantity = Total) Get total amount of product; 
 	
 	// Keep in array
 	$cart_item = array("$ItemName","$ItemDesc","$ItemNumber","$ItemPrice","$ItemQty","$ItemTotalPrice"); 
@@ -58,7 +58,6 @@ $paymentAmount = $_SESSION['cart_item_total_amt'] + $shipping_amt + $tax_amt;
 $_SESSION["Payment_Amount"] = $paymentAmount; // will be used at checkout.php (SET) & confirm_payment.php (DO)
 
 
-
 include("header.php");
 
 ?>
@@ -90,9 +89,9 @@ include("header.php");
 				<div class="col1"><?php echo $c[0];?> (<?php echo $c[2]; ?>)
 					<br><?php echo $c[1]; ?>
 				</div>
-				<div class="col2"> $<?php echo $c[3]; ?></div>
+				<div class="col2"> $<?php echo number_format($c[3],2); ?></div>
 				<div class="col3" style="text-align:center"><?php echo $c[4]; ?></div>
-				<div class="col4">$<?php echo $c[5]; ?></div>
+				<div class="col4">$<?php echo number_format($c[5],2); ?></div>
 			</div>								
 <?php
 		} // foreach

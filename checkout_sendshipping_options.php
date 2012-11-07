@@ -5,6 +5,7 @@ include_once("config.php");
 include_once("paypal_ecfunctions.php");
 
 
+
 /* ----------------------------------------------------
 //  PayPal Express Checkout Call - SetExpressCheckout()
 //  and redirect to paypal side
@@ -22,28 +23,7 @@ $_SESSION['useraction'] = 'commit';
 // Paypal will post user's shipping address
 if ($_REQUEST['action'] == "callbackSet")  
 {
-
-	// check have cart item
-    $counter = 0;
-    while (true) {
-    	if (isset($HTTP_POST_VARS['L_NUMBER' . $counter])) 
-    	{
-    		$cart_callbkreq[] = array($_POST['L_NAME' . $counter],
-    								$_POST['L_NUMBER' . $counter],
-    								$_POST['L_DESC' . $counter],
-    								$_POST['L_AMT' . $counter], 
-    								$_POST['L_QTY' . $counter]);
-    	} else {
-            break;
-        }
-        $counter++;
-    }	
-
-	// exit if there is nothing in the shopping cart
-    //if (count($cart_callbkreq) < 1) {
-          //exit;
-    //}
-
+    
 	// get shipping address from paypal callbackrequest
 	$SHIPTOSTREET = $_POST['SHIPTOSTREET'];
 	$SHIPTOSTREET2 = $_POST['SHIPTOSTREET2'];
@@ -119,14 +99,12 @@ if ($_REQUEST['action'] == "callbackSet")
 		$max_amount = '&MAXAMT=100'; 				// required for Instant Update API
 		$callbackversion = '&CALLBACKVERSION=61'; 	// required for Instant Update API
 
-		$cburl = 'http://localhost/paypal/demo/checkout_sendshipping_options.php?action=callbackSet';
+		// call back url
+		$cburl = $domain.'/ecsection4/checkout_sendshipping_options.php?action=callbackSet';
 		$callbackurl = '&CALLBACK='.urlencode($cburl);
 		$calltimeout = '&CALLBACKTIMEOUT=5';
 
-
-		//$tax_data = '';
-		//if($tax_amt)
-				//$tax_data = '&PAYMENTREQUEST_0_TAXAMT='.urlencode($tax_amt);		
+	
 		
 		$padata = 	$insurance_data.	
 					$shipping_option.

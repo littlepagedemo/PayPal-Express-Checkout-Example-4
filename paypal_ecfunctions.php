@@ -43,7 +43,7 @@ include_once("config.php");
 	*/	
 	
 	$tax_amt = '0';		// no tax amount
-	$tax_amt = '2.00';	// or Flat rate
+	//$tax_amt = '2.00';	// or Flat rate
 
 	//-------------------------------------------	
 	// Check cart item exits

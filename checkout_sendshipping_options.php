@@ -43,14 +43,17 @@ if ($_REQUEST['action'] == "callbackSet")
 	$shipping_option .= '&L_SHIPPINGOPTIONNAME0='.urlencode($shipping_method0).
 							'&L_SHIPINGPOPTIONLABEL0='.urlencode($shipping_label0).
 							'&L_SHIPPINGOPTIONAMOUNT0='.urlencode($shipping_amount0).
+							'&L_TAXAMT0='.urlencode($shipping_tax0).
 							'&L_SHIPPINGOPTIONISDEFAULT0='.urlencode($shipping_isdef0).
 							'&L_SHIPPINGOPTIONNAME1='.urlencode($shipping_method1).
 							'&L_SHIPINGPOPTIONLABEL1='.urlencode($shipping_label1).
 							'&L_SHIPPINGOPTIONAMOUNT1='.urlencode($shipping_amount1).
+							'&L_TAXAMT1='.urlencode($shipping_tax1).
 							'&L_SHIPPINGOPTIONISDEFAULT1='.urlencode($shipping_isdef1).
 							'&L_SHIPPINGOPTIONNAME2='.urlencode($shipping_method2).
 							'&L_SHIPINGPOPTIONLABEL2='.urlencode($shipping_label2).
 							'&L_SHIPPINGOPTIONAMOUNT2='.urlencode($shipping_amount2).
+							'&L_TAXAMT2='.urlencode($shipping_tax2).
 							'&L_SHIPPINGOPTIONISDEFAULT2='.urlencode($shipping_isdef2);                        
 
 	$currencyCodeType = '&CURRENCYCODE=' . $PayPalCurrencyCode;
@@ -76,15 +79,19 @@ if ($_REQUEST['action'] == "callbackSet")
 		$shipping_option .= '&L_SHIPPINGOPTIONNAME0='.urlencode($shipping_method0).
 							'&L_SHIPINGPOPTIONLABEL0='.urlencode($shipping_label0).
 							'&L_SHIPPINGOPTIONAMOUNT0='.urlencode($shipping_amount0).
+							'&L_TAXAMT0='.urlencode($shipping_tax0).
 							'&L_SHIPPINGOPTIONISDEFAULT0='.urlencode($shipping_isdef0).
 							'&L_SHIPPINGOPTIONNAME1='.urlencode($shipping_method1).
 							'&L_SHIPINGPOPTIONLABEL1='.urlencode($shipping_label1).
 							'&L_SHIPPINGOPTIONAMOUNT1='.urlencode($shipping_amount1).
-							'&L_SHIPPINGOPTIONISDEFAULT1='.urlencode($shipping_isdef1).
+							'&L_TAXAMT1='.urlencode($shipping_tax1).
+							'&L_SHIPPINGOPTIONISDEFAULT1='.urlencode($shipping_isdef1).							
 							'&L_SHIPPINGOPTIONNAME2='.urlencode($shipping_method2).
 							'&L_SHIPINGPOPTIONLABEL2='.urlencode($shipping_label2).
 							'&L_SHIPPINGOPTIONAMOUNT2='.urlencode($shipping_amount2).
+							'&L_TAXAMT2='.urlencode($shipping_tax2).
 							'&L_SHIPPINGOPTIONISDEFAULT2='.urlencode($shipping_isdef2);
+							
 
 		$insurance_data = '&OFFERINSURANCEOPTION=false';
 										 
@@ -99,9 +106,8 @@ if ($_REQUEST['action'] == "callbackSet")
 		$max_amount = '&MAXAMT=100'; 				// required for Instant Update API
 		$callbackversion = '&CALLBACKVERSION=61'; 	// required for Instant Update API
 
-		// call back url
-		$cburl = $domain.'/ecsection4/checkout_sendshipping_options.php?action=callbackSet';
-		$callbackurl = '&CALLBACK='.urlencode($cburl);
+		// call back url		
+		$callbackurl = '&CALLBACK='.urlencode($CallBackURL);
 		$calltimeout = '&CALLBACKTIMEOUT=5';
 
 	

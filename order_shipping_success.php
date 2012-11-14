@@ -47,7 +47,7 @@ if ( $token != "" )
 		$shipping_opt 		= $resArray['SHIPPINGOPTIONNAME'];
 		$shipping_opt_amt	= $resArray['SHIPPINGOPTIONAMOUNT'];
 		$shipping_amt		= $resArray['PAYMENTREQUEST_0_SHIPPINGAMT'];
-		
+		$tax_amt 			= $resArray['TAXAMT'];
 		
 		//---------------------------------------
 		// Save user's shipping address into DB
